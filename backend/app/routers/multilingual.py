@@ -1,3 +1,7 @@
+"""FastAPI router for multilingual RAG chatbot assistance.
+
+Processes fan questions about stadium layout and amenities using venue knowledge documents.
+"""
 from fastapi import APIRouter
 from app.models.schemas import MultilingualChatQuery
 from app.services import llm_service, rag_service, crowd_predictor

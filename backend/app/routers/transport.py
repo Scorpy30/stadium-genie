@@ -1,3 +1,7 @@
+"""FastAPI router for transit and parking recommendations.
+
+Provides matchday recommendations considering origin hub and kickoff timing.
+"""
 from fastapi import APIRouter
 from app.models.schemas import TransportRequest
 from app.services import llm_service, rag_service

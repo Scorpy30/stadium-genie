@@ -1,4 +1,10 @@
+"""Main FastAPI application entry point.
+
+Initializes the FastAPI application, sets up lifespan events (loading venue documentation),
+adds security middlewares, registers routers, and exposes global health endpoints.
+"""
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 from fastapi import FastAPI
 from app.core.security import add_security_middleware
 from app.core.logging_config import configure_logging
@@ -18,7 +24,7 @@ logger = configure_logging()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Load the venue knowledge base into memory every time the server
     starts. Without this, the in-memory RAG index resets on every restart
     (including uvicorn --reload triggering on file changes), and the
@@ -51,5 +57,10 @@ for router in (
 
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, str]:
+    """Expose a simple health check endpoint.
+
+    Returns:
+        A dictionary containing the API status.
+    """
     return {"status": "ok"}

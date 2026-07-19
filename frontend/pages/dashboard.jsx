@@ -156,12 +156,12 @@ export default function Dashboard() {
               {Object.entries(zoneMetrics).map(([zone, data]) => {
                 const color = data.alert ? "#ef4444" : data.current_load_pct > 70 ? "#ffb100" : "#3ecf8e";
                 return (
-                  <div key={zone} style={{ borderBottom: "1px solid #d8e2dc", paddingBottom: "0.5rem" }}>
+                  <div key={zone} style={{ borderBottom: "1px solid var(--line)", paddingBottom: "0.5rem" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", fontWeight: "600", marginBottom: "4px" }}>
                       <span>Zone {zone} {data.alert ? "⚠️ (Congested)" : ""}</span>
                       <span style={{ color: color }}>{data.current_load_pct}% Capacity ({data.trend})</span>
                     </div>
-                    <div style={{ width: "100%", height: "8px", background: "#f1f5f9", borderRadius: "4px", overflow: "hidden" }}>
+                    <div style={{ width: "100%", height: "8px", background: "var(--panel-soft)", borderRadius: "4px", overflow: "hidden" }}>
                       <div style={{ width: `${data.current_load_pct}%`, height: "100%", background: color, transition: "width 0.4s ease" }} />
                     </div>
                   </div>
@@ -175,7 +175,7 @@ export default function Dashboard() {
             <form onSubmit={handleSimulateCrowd} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <div style={{ display: "flex", gap: "0.5rem" }}>
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="sim-zone" style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: "600" }}>Zone</label>
+                  <label htmlFor="sim-zone" style={{ fontSize: "0.75rem", color: "var(--mist)", fontWeight: "600" }}>Zone</label>
                   <select id="sim-zone" className="kiosk-input" value={simZone} onChange={(e) => setSimZone(e.target.value)} style={{ width: "100%", padding: "0.5rem" }}>
                     <option value="A">Zone A</option>
                     <option value="B">Zone B</option>
@@ -184,11 +184,11 @@ export default function Dashboard() {
                   </select>
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="sim-count" style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: "600" }}>Count</label>
+                  <label htmlFor="sim-count" style={{ fontSize: "0.75rem", color: "var(--mist)", fontWeight: "600" }}>Count</label>
                   <input id="sim-count" type="number" className="kiosk-input" value={simCount} onChange={(e) => setSimCount(e.target.value)} style={{ width: "100%", padding: "0.5rem" }} />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="sim-capacity" style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: "600" }}>Capacity</label>
+                  <label htmlFor="sim-capacity" style={{ fontSize: "0.75rem", color: "var(--mist)", fontWeight: "600" }}>Capacity</label>
                   <input id="sim-capacity" type="number" className="kiosk-input" value={simCapacity} onChange={(e) => setSimCapacity(e.target.value)} style={{ width: "100%", padding: "0.5rem" }} />
                 </div>
               </div>
@@ -198,7 +198,7 @@ export default function Dashboard() {
             </form>
 
             <div style={{ marginTop: "1rem" }}>
-              <label htmlFor="active-incidents" style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: "600", display: "block" }}>Active Incidents (separated by semicolons)</label>
+              <label htmlFor="active-incidents" style={{ fontSize: "0.75rem", color: "var(--mist)", fontWeight: "600", display: "block" }}>Active Incidents (separated by semicolons)</label>
               <input
                 id="active-incidents"
                 type="text"
@@ -216,7 +216,7 @@ export default function Dashboard() {
         <section className="kiosk-panel" aria-label="GenAI decision support">
           <span className="kiosk-panel__label">GenAI Decision Support Recommendations</span>
           {loadingDecisions ? (
-            <div style={{ padding: "2rem", textAlign: "center", color: "#64748b", fontWeight: "600" }}>
+            <div style={{ padding: "2rem", textAlign: "center", color: "var(--mist)", fontWeight: "600" }}>
               Analyzing live metrics and drafting response recommendations...
             </div>
           ) : (
@@ -230,16 +230,16 @@ export default function Dashboard() {
                   <div
                     key={idx}
                     style={{
-                      border: "1px solid #d8e2dc",
+                      border: "1px solid var(--line)",
                       borderRadius: "8px",
                       padding: "1rem",
-                      background: "#fff",
+                      background: "var(--panel)",
                       borderLeft: `5px solid ${priorityColor}`,
                       animation: "board-in 0.25s ease-out"
                     }}
                   >
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.4rem" }}>
-                      <span style={{ fontWeight: "700", fontSize: "0.95rem", color: "#0f172a" }}>{item.action}</span>
+                      <span style={{ fontWeight: "700", fontSize: "0.95rem", color: "var(--ink)" }}>{item.action}</span>
                       <span
                         style={{
                           fontSize: "0.7rem",
@@ -254,14 +254,14 @@ export default function Dashboard() {
                         {item.priority}
                       </span>
                     </div>
-                    <p style={{ margin: 0, fontSize: "0.85rem", color: "#475569", lineHeight: "1.4" }}>
+                    <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--mist)", lineHeight: "1.4" }}>
                       <strong>Rationale:</strong> {item.rationale}
                     </p>
                   </div>
                 );
               })}
               {decisionActions.length === 0 && (
-                <div style={{ gridColumn: "span 2", padding: "1.5rem", textAlign: "center", color: "#64748b" }}>
+                <div style={{ gridColumn: "span 2", padding: "1.5rem", textAlign: "center", color: "var(--mist)" }}>
                   All stadium operations running optimally. No decision recommendations required.
                 </div>
               )}

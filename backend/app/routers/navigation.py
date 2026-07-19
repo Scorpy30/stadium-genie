@@ -1,3 +1,7 @@
+"""FastAPI router for wayfinding and navigation.
+
+Provides step-by-step turn-by-turn routing instructions for stadium visitors.
+"""
 from fastapi import APIRouter
 from app.models.schemas import NavigationQuery, NavigationResponse
 from app.services import llm_service, rag_service

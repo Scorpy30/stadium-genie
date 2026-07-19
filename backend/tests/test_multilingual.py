@@ -1,3 +1,4 @@
+"""Unit tests for the multilingual RAG chat routes."""
 import pytest
 from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
@@ -6,7 +7,8 @@ from app.main import app
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_completion")
-async def test_multilingual_chat(mock_get_completion):
+async def test_multilingual_chat(mock_get_completion) -> None:
+    """Test the multilingual chat POST endpoint with LLM completion mocking."""
     mock_get_completion.return_value = "Hola! La entrada principal esta a 50 metros."
 
     transport = ASGITransport(app=app)

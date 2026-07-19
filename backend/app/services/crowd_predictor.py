@@ -5,7 +5,7 @@ fired. Swap in a real ML model later without touching the router contract.
 """
 from collections import defaultdict, deque
 
-_history: dict[str, deque] = defaultdict(lambda: deque(maxlen=5))
+_history: dict[str, deque[float]] = defaultdict(lambda: deque(maxlen=5))
 
 RISING_ALERT_THRESHOLD = 0.85  # 85% of capacity
 
@@ -75,12 +75,14 @@ def get_status(zone_id: str) -> dict[str, str | float | bool] | None:
 
 
 def get_all_status() -> list[dict[str, str | float | bool]]:
-    """Return current status for every zone that has data, so the fan
-    chatbot can reference live crowd info instead of having no access to
-    it at all. (Demo-scope note: zones aren't tagged per-venue yet, so this
-    returns all known zones regardless of which stadium the fan selected.)
+    """Return current status for every zone that has data.
 
     Returns:
         A list of dict status objects.
     """
-    return [get_status(zone_id) for zone_id in _history.keys() if get_status(zone_id)]  # type: ignore
+    statuses: list[dict[str, str | float | bool]] = []
+    for zone_id in _history.keys():
+        status = get_status(zone_id)
+        if status is not None:
+            statuses.append(status)
+    return statuses

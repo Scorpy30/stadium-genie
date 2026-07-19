@@ -7,8 +7,33 @@
   --amber: #ffb100;
   --floodlight: #f6f8f4;
   --ink: #0d1512;
-  --mist: #7c8c84;
+  --mist: #64746c;
   --line: #d8e2dc;
+  --panel: #ffffff;
+  --panel-soft: #f1f5f2;
+  --nav-bg: rgba(11, 59, 46, 0.9);
+  --nav-text: #cfe0d8;
+  --danger: #ef4444;
+  --shadow: 0 1px 2px rgba(13, 21, 18, 0.04);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --pitch-dark: #061f19;
+  --pitch: #0f4b3b;
+  --turf: #52e39e;
+  --amber: #ffc44d;
+  --floodlight: #08130f;
+  --ink: #edf7f1;
+  --mist: #a7beb2;
+  --line: #23483b;
+  --panel: #0e211b;
+  --panel-soft: #132c24;
+  --nav-bg: rgba(6, 31, 25, 0.94);
+  --nav-text: #d8e8e0;
+  --danger: #fb7185;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
 }
 
 * {
@@ -22,6 +47,58 @@ body {
   background: var(--floodlight);
   color: var(--ink);
   font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.app-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(8px);
+  border-bottom: 2px solid var(--turf);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.app-nav__brand {
+  font-family: 'Teko', sans-serif;
+  font-size: 1.8rem;
+  color: var(--turf);
+  text-transform: uppercase;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.app-nav__links {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.app-nav__link {
+  color: var(--nav-text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 4px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-nav__link:hover,
+.app-nav__link--active {
+  color: var(--amber);
+  border-bottom-color: var(--amber);
 }
 
 .gate-bar {
@@ -44,7 +121,6 @@ body {
   font-family: 'Teko', sans-serif;
   font-weight: 600;
   font-size: clamp(2.4rem, 6vw, 3.6rem);
-  letter-spacing: 0.01em;
   text-transform: uppercase;
   margin: 0;
   line-height: 1;
@@ -52,7 +128,7 @@ body {
 
 .gate-bar p {
   font-size: 0.95rem;
-  color: #cfe0d8;
+  color: var(--nav-text);
   margin: 0.6rem 0 0;
   max-width: 42ch;
 }
@@ -64,11 +140,11 @@ body {
 }
 
 .kiosk-panel {
-  background: #fff;
+  background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: 0 1px 2px rgba(13, 21, 18, 0.04);
+  box-shadow: var(--shadow);
 }
 
 .kiosk-panel__label {
@@ -87,6 +163,10 @@ body {
   flex-wrap: wrap;
 }
 
+.kiosk-row--centered {
+  align-items: center;
+}
+
 .kiosk-input {
   flex: 1 1 220px;
   min-width: 0;
@@ -96,7 +176,15 @@ body {
   font-size: 1rem;
   font-family: inherit;
   color: var(--ink);
-  background: var(--floodlight);
+  background: var(--panel-soft);
+}
+
+.kiosk-input--grow {
+  flex: 1 1 220px;
+}
+
+.kiosk-input--language {
+  flex: 0 0 130px;
 }
 
 .kiosk-input:focus-visible {
@@ -123,7 +211,12 @@ body {
   font-weight: 600;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition: transform 0.12s ease, background 0.12s ease, opacity 0.12s ease;
+}
+
+.kiosk-button--compact {
+  min-width: 4.75rem;
+  padding-inline: 0.9rem;
 }
 
 .kiosk-button:hover:not(:disabled) {
@@ -135,13 +228,23 @@ body {
 }
 
 .kiosk-button:focus-visible {
-  outline: 2px solid var(--pitch-dark);
+  outline: 2px solid var(--amber);
   outline-offset: 2px;
 }
 
 .kiosk-button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: default;
+}
+
+.kiosk-help {
+  margin: 0.75rem 0 0;
+  font-size: 0.86rem;
+  color: var(--mist);
+}
+
+.kiosk-help--error {
+  color: var(--danger);
 }
 
 .board {
@@ -186,7 +289,7 @@ body {
 }
 
 .board--empty .board__text {
-  color: #5b7a6c;
+  color: var(--mist);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -211,7 +314,23 @@ body {
   font-weight: 600;
   font-size: 1.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.01em;
   margin: 2rem 0 0.75rem;
   color: var(--pitch-dark);
+}
+
+:root[data-theme='dark'] .section-title {
+  color: var(--turf);
+}
+
+@media (max-width: 720px) {
+  .app-nav {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .app-nav__links {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
 }

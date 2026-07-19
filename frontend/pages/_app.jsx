@@ -1,71 +1,58 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import "../styles/globals.css";
+
+const NAV_LINKS = [
+  { path: "/", label: "Fan Desk" },
+  { path: "/chat", label: "Volunteer Desk" },
+  { path: "/dashboard", label: "Operations" },
+];
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
+  const [darkMode, setDarkMode] = useState(false);
+  const [themeReady, setThemeReady] = useState(false);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("stadiumGenieTheme");
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+    setDarkMode(storedTheme ? storedTheme === "dark" : Boolean(prefersDark));
+    setThemeReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!themeReady) return;
+    document.documentElement.dataset.theme = darkMode ? "dark" : "light";
+    window.localStorage.setItem("stadiumGenieTheme", darkMode ? "dark" : "light");
+  }, [darkMode, themeReady]);
 
   return (
     <div>
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "1rem 1.5rem",
-          background: "rgba(11, 59, 46, 0.85)",
-          backdropFilter: "blur(8px)",
-          borderBottom: "2px solid #3ecf8e",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          boxShadow: "0 4px 10px rgba(0,0,0,0.15)"
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Teko', sans-serif",
-            fontSize: "1.8rem",
-            color: "#3ecf8e",
-            textTransform: "uppercase",
-            letterSpacing: "0.05em",
-            fontWeight: "600"
-          }}
-        >
-          StadiumGenie ⚡
-        </span>
-        <div style={{ display: "flex", gap: "1.25rem" }}>
-          {[
-            { path: "/", label: "Fan Desk" },
-            { path: "/chat", label: "Volunteer Desk" },
-            { path: "/dashboard", label: "Operations" }
-          ].map((navLink) => {
+      <nav className="app-nav" aria-label="Main navigation">
+        <span className="app-nav__brand">StadiumGenie</span>
+        <div className="app-nav__links">
+          {NAV_LINKS.map((navLink) => {
             const isActive = router.pathname === navLink.path;
             return (
               <Link key={navLink.path} href={navLink.path} legacyBehavior>
-                <a
-                  style={{
-                    color: isActive ? "#ffb100" : "#cfe0d8",
-                    fontWeight: "600",
-                    fontSize: "0.95rem",
-                    textDecoration: "none",
-                    borderBottom: isActive ? "2px solid #ffb100" : "2px solid transparent",
-                    paddingBottom: "4px",
-                    transition: "all 0.15s ease"
-                  }}
-                  onMouseOver={(e) => {
-                    if (!isActive) e.target.style.color = "#ffb100";
-                  }}
-                  onMouseOut={(e) => {
-                    if (!isActive) e.target.style.color = "#cfe0d8";
-                  }}
-                >
+                <a className={`app-nav__link ${isActive ? "app-nav__link--active" : ""}`}>
                   {navLink.label}
                 </a>
               </Link>
             );
           })}
         </div>
+        <button
+          type="button"
+          className="kiosk-button kiosk-button--compact"
+          onClick={() => setDarkMode((enabled) => !enabled)}
+          aria-pressed={darkMode}
+          aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
+          title={darkMode ? "Switch to light theme" : "Switch to dark theme"}
+        >
+          {darkMode ? "Light" : "Dark"}
+        </button>
       </nav>
       <Component {...pageProps} />
     </div>

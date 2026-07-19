@@ -1,3 +1,4 @@
+"""Tests for the venues router."""
 import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
@@ -6,6 +7,7 @@ from app.services import rag_service
 
 @pytest.mark.asyncio
 async def test_list_venues():
+    """Test that the venues endpoint returns a list with expected venue IDs."""
     rag_service.index_docs()
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:

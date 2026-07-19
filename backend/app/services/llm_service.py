@@ -6,6 +6,7 @@ local Ollama model for the demo, and switch to Gemini/OpenAI if a team member
 has a key.
 """
 import json
+from typing import Any
 import httpx
 from app.config import settings
 
@@ -67,7 +68,7 @@ async def get_completion(system_prompt: str, user_prompt: str, json_mode: bool =
     raise ValueError(f"Unsupported LLM_PROVIDER: {provider}")
 
 
-async def get_structured_completion(system_prompt: str, user_prompt: str) -> dict:
+async def get_structured_completion(system_prompt: str, user_prompt: str) -> dict[str, Any]:
     """Ask for JSON and parse it defensively — never trust raw LLM text for
     anything that will drive an operational recommendation."""
     raw = await get_completion(system_prompt, user_prompt, json_mode=True)

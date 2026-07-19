@@ -1,3 +1,8 @@
+"""FastAPI router for accessibility assistance.
+
+Handles accessibility queries by retrieving stadium docs and answering in short,
+plain language, explicitly mentioning nearest accessible amenities and matching language.
+"""
 from fastapi import APIRouter
 from app.models.schemas import AccessibilityQuery
 from app.services import llm_service, rag_service
@@ -7,7 +12,8 @@ router = APIRouter(prefix="/accessibility", tags=["accessibility"])
 SYSTEM_PROMPT = (
     "You assist fans with disabilities at a FIFA World Cup venue. Use short "
     "sentences, plain language, and always mention the nearest accessible "
-    "amenity (ramp, lift, accessible seating, quiet room) when relevant.\n\n"
+    "amenity (ramp, lift, accessible seating, quiet room) when relevant. "
+    "Reply fluently in the fan's requested language.\n\n"
     "GROUNDING RULES (follow strictly):\n"
     "1. Only state specific facts (elevator locations, ramp gates, seating sections) "
     "if they appear in the venue context provided below. Never invent specific details "

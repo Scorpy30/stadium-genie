@@ -1,3 +1,7 @@
+"""FastAPI router to list loaded venues.
+
+Enables the frontend to populate the stadium selector from active documentation folders.
+"""
 from fastapi import APIRouter
 from app.services import rag_service
 

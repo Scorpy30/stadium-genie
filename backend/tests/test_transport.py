@@ -1,3 +1,4 @@
+"""Unit tests for the transit/parking recommendations routes."""
 import pytest
 from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
@@ -6,7 +7,8 @@ from app.main import app
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_completion")
-async def test_transport_recommend(mock_get_completion):
+async def test_transport_recommend(mock_get_completion) -> None:
+    """Test the transport recommendation POST endpoint with LLM completion mocking."""
     mock_get_completion.return_value = "Take the PATH train to Journal Square, then board the free shuttle to the stadium."
 
     transport = ASGITransport(app=app)

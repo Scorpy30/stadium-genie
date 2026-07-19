@@ -1,3 +1,4 @@
+"""Unit tests for the sustainability waste classification routes."""
 import pytest
 from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
@@ -6,7 +7,8 @@ from app.main import app
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_structured_completion")
-async def test_sustainability_classify(mock_get_structured_completion):
+async def test_sustainability_classify(mock_get_structured_completion) -> None:
+    """Test the sustainability waste classification POST endpoint with structured LLM mocking."""
     mock_get_structured_completion.return_value = {
         "predicted_category": "recyclable",
         "disposal_instruction": "Throw it in the blue recycling bin.",

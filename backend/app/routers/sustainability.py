@@ -1,3 +1,7 @@
+"""FastAPI router for stadium sustainability and waste classification.
+
+Classifies waste items described by fans and recommends correct bins.
+"""
 from fastapi import APIRouter
 from app.models.schemas import SustainabilityQuery, SustainabilityClassification
 from app.services import llm_service

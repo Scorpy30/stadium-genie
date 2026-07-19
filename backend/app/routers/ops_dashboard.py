@@ -1,3 +1,7 @@
+"""FastAPI router for the organizer operations dashboard.
+
+Generates shift-handover summaries and ranks real-time recommended action logs.
+"""
 from fastapi import APIRouter
 from app.models.schemas import DecisionSupportRequest, DecisionSupportResponse, RecommendedAction
 from app.services import llm_service

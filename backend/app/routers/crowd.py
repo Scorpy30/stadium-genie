@@ -1,3 +1,7 @@
+"""FastAPI router for crowd monitoring and density predictions.
+
+Exposes endpoints to ingest real-time crowd metrics and retrieve occupancy alerts.
+"""
 from fastapi import APIRouter, HTTPException
 from app.models.schemas import CrowdIngest, CrowdStatus
 from app.services.crowd_predictor import ingest, get_status

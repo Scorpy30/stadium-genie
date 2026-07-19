@@ -1,3 +1,4 @@
+"""Unit tests for the accessibility assistance routes."""
 import pytest
 from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
@@ -6,7 +7,8 @@ from app.main import app
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_completion")
-async def test_accessibility_assist(mock_get_completion):
+async def test_accessibility_assist(mock_get_completion) -> None:
+    """Test the accessibility assist POST endpoint with LLM completion mocking."""
     mock_get_completion.return_value = "The nearest elevator is located next to Gate C."
 
     transport = ASGITransport(app=app)

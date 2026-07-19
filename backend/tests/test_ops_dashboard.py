@@ -1,3 +1,4 @@
+"""Unit tests for the organizer operations dashboard routes."""
 import pytest
 from unittest.mock import patch
 from httpx import AsyncClient, ASGITransport
@@ -6,7 +7,8 @@ from app.main import app
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_completion")
-async def test_ops_summary(mock_get_completion):
+async def test_ops_summary(mock_get_completion) -> None:
+    """Test the ops summary digest GET endpoint with LLM completion mocking."""
     mock_get_completion.return_value = "All quiet at MetLife. No major incidents reported."
 
     transport = ASGITransport(app=app)
@@ -20,7 +22,8 @@ async def test_ops_summary(mock_get_completion):
 
 @pytest.mark.asyncio
 @patch("app.services.llm_service.get_structured_completion")
-async def test_ops_decision_support(mock_get_structured_completion):
+async def test_ops_decision_support(mock_get_structured_completion) -> None:
+    """Test the decision support recommended-actions POST endpoint with structured LLM mocking."""
     mock_get_structured_completion.return_value = {
         "actions": [
             {
