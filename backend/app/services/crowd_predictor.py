@@ -10,7 +10,17 @@ _history: dict[str, deque] = defaultdict(lambda: deque(maxlen=5))
 RISING_ALERT_THRESHOLD = 0.85  # 85% of capacity
 
 
-def ingest(zone_id: str, count: int, capacity: int) -> dict:
+def ingest(zone_id: str, count: int, capacity: int) -> dict[str, str | float | bool]:
+    """Ingest a new crowd sensor reading for a zone and update its trend and alerts.
+
+    Args:
+        zone_id: Identifier of the stadium zone.
+        count: Current number of fans in the zone.
+        capacity: Maximum capacity of the zone.
+
+    Returns:
+        A dict with zone_id, current_load_pct, trend, and alert status.
+    """
     load_pct = count / capacity
     _history[zone_id].append(load_pct)
     history = list(_history[zone_id])
@@ -32,9 +42,16 @@ def ingest(zone_id: str, count: int, capacity: int) -> dict:
     }
 
 
-def get_status(zone_id: str) -> dict | None:
+def get_status(zone_id: str) -> dict[str, str | float | bool] | None:
     """Return the most recent computed reading for a zone, or None if no
-    data has been ingested for it yet."""
+    data has been ingested for it yet.
+
+    Args:
+        zone_id: Identifier of the stadium zone.
+
+    Returns:
+        A dict with the status or None.
+    """
     history = list(_history.get(zone_id, []))
     if not history:
         return None
@@ -56,9 +73,14 @@ def get_status(zone_id: str) -> dict | None:
         "alert": alert,
     }
 
-def get_all_status() -> list[dict]:
+
+def get_all_status() -> list[dict[str, str | float | bool]]:
     """Return current status for every zone that has data, so the fan
     chatbot can reference live crowd info instead of having no access to
     it at all. (Demo-scope note: zones aren't tagged per-venue yet, so this
-    returns all known zones regardless of which stadium the fan selected.)"""
-    return [get_status(zone_id) for zone_id in _history.keys() if get_status(zone_id)]
+    returns all known zones regardless of which stadium the fan selected.)
+
+    Returns:
+        A list of dict status objects.
+    """
+    return [get_status(zone_id) for zone_id in _history.keys() if get_status(zone_id)]  # type: ignore

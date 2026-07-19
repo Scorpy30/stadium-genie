@@ -3,6 +3,7 @@
 Keeping this isolated makes it easy for judges/reviewers to audit the
 project's security posture in one place.
 """
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -12,7 +13,12 @@ from app.config import settings
 limiter = Limiter(key_func=get_remote_address, default_limits=[settings.RATE_LIMIT])
 
 
-def add_security_middleware(app):
+def add_security_middleware(app: FastAPI) -> None:
+    """Add CORS and rate-limiting middleware to the FastAPI application.
+
+    Args:
+        app: The FastAPI application instance to secure.
+    """
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.ALLOWED_ORIGINS,

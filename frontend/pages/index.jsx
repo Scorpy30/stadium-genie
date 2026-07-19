@@ -2,6 +2,7 @@ import { useState } from "react";
 import ChatWidget from "../components/ChatWidget";
 import VenueSelector from "../components/VenueSelector";
 import TransportWidget from "../components/TransportWidget";
+import SustainabilityWidget from "../components/SustainabilityWidget";
 
 export default function Home() {
   const [venueId, setVenueId] = useState("metlife");
@@ -24,6 +25,9 @@ export default function Home() {
 
         <h2 className="section-title">Getting there</h2>
         <TransportWidget venueId={venueId} />
+
+        <h2 className="section-title">Sustainability Sorting Coach</h2>
+        <SustainabilityWidget />
       </main>
     </>
   );

@@ -15,11 +15,17 @@ SYSTEM_PROMPT = (
 
 
 @router.post("/classify", response_model=SustainabilityClassification)
-async def classify_waste(query: SustainabilityQuery):
-    """Text-based GenAI waste classification. A fan (or a volunteer on their
-    behalf) describes the item in a sentence; the LLM classifies it and
-    returns venue-appropriate disposal guidance. (Swap the input for an
-    image + a vision-capable model later if the team wants full photo
-    classification -- the response contract here won't need to change.)"""
+async def classify_waste(query: SustainabilityQuery) -> SustainabilityClassification:
+    """Text-based GenAI waste classification.
+
+    A fan (or a volunteer on their behalf) describes the item in a sentence; the
+    LLM classifies it and returns venue-appropriate disposal guidance.
+
+    Args:
+        query: SustainabilityQuery containing the item description string.
+
+    Returns:
+        The SustainabilityClassification containing predicted category, instructions, and confidence.
+    """
     data = await llm_service.get_structured_completion(SYSTEM_PROMPT, query.item_description)
     return SustainabilityClassification(**data)

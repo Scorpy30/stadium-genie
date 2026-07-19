@@ -25,7 +25,20 @@ SYSTEM_PROMPT = (
 
 
 @router.post("/chat")
-async def chat(query: MultilingualChatQuery):
+async def chat(query: MultilingualChatQuery) -> dict[str, str | None]:
+    """Process a multilingual RAG chat query for a specific venue.
+
+    Retrieves context docs based on the query and current venue_id, compiles
+    live crowd alerts, and sends a prompt to the LLM to get a grounded response
+    in the requested language.
+
+    Args:
+        query: MultilingualChatQuery containing the query question, language,
+               session_id and venue_id.
+
+    Returns:
+        A dict with keys: answer, session_id, and venue_id.
+    """
     context_docs = rag_service.retrieve(query.question, query.venue_id)
     context = "\n".join(
         context_docs) if context_docs else "(no venue data available)"

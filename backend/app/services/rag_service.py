@@ -26,6 +26,7 @@ _DEFAULT_DOCS_ROOT = _PROJECT_ROOT / "data" / "sample_stadium_docs"
 
 
 def _tokenize(text: str) -> set[str]:
+    """Tokenize text into a set of lowercased alphanumeric tokens."""
     return set(re.findall(r"[a-z0-9]+", text.lower()))
 
 

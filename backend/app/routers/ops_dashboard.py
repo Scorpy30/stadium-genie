@@ -18,13 +18,32 @@ DECISION_PROMPT = (
 
 
 @router.get("/summary")
-async def summary(incident_log: str = ""):
+async def summary(incident_log: str = "") -> dict[str, str]:
+    """Generate a GenAI-written concise shift-handover digest for venue organizers.
+
+    Args:
+        incident_log: Raw log text of active incidents and shift activities.
+
+    Returns:
+        A dict containing the summarized 'digest' string.
+    """
     text = await llm_service.get_completion(SUMMARY_PROMPT, incident_log or "No incidents logged.")
     return {"digest": text}
 
 
 @router.post("/decision-support", response_model=DecisionSupportResponse)
-async def decision_support(req: DecisionSupportRequest):
+async def decision_support(req: DecisionSupportRequest) -> DecisionSupportResponse:
+    """Generate structured recommended-actions with priority based on live metrics.
+
+    Uses LLM reasoning to evaluate current zone densities and active incidents,
+    producing up to 4 concrete, actionable operational decisions.
+
+    Args:
+        req: DecisionSupportRequest containing zone_metrics and active_incidents list.
+
+    Returns:
+        A DecisionSupportResponse containing validated RecommendedAction structures.
+    """
     user_prompt = (
         f"Zone metrics: {req.zone_metrics}\nActive incidents: {req.active_incidents}"
     )

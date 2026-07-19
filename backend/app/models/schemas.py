@@ -34,6 +34,8 @@ class AccessibilityQuery(BaseModel):
     question: str
     mode: Literal["voice", "text"] = "text"
     plain_language: bool = True
+    venue_id: str | None = None
+    language: str = "en"
 
 
 class TransportRequest(BaseModel):

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * Accessible kiosk-style chat widget: keyboard-navigable, screen-reader
  * friendly (aria-live region for responses), with a "plain language"
  * toggle for accessibility mode. The answer renders as a stadium
- * scoreboard-style readout to match the venue-kiosk visual identity.
+ * scoreboard-style readout to match the kiosk visual identity.
  *
  * `venueId` simulates what a real deployment would already know before the
  * fan ever asks a question -- from a QR check-in, geofencing, or venue
@@ -19,9 +19,20 @@ export default function ChatWidget({
   const [answer, setAnswer] = useState("");
   const [plainLanguage, setPlainLanguage] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [readAloud, setReadAloud] = useState(false);
+
+  // Stop talking if widget is unmounted
+  useEffect(() => {
+    return () => {
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     if (!question.trim()) return;
     setLoading(true);
     try {
@@ -37,12 +48,52 @@ export default function ChatWidget({
         }),
       });
       const data = await res.json();
-      setAnswer(data.answer || data.recommendation || JSON.stringify(data));
+      const outputText = data.answer || data.recommendation || JSON.stringify(data);
+      setAnswer(outputText);
+
+      // Accessibility: Read back the answer if enabled
+      if (readAloud && typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(outputText);
+        window.speechSynthesis.speak(utterance);
+      }
     } catch {
       setAnswer("Could not reach the assistant right now. Please try again.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleVoiceInput() {
+    if (typeof window === "undefined") return;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser. Try Chrome or Edge.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setQuestion(transcript);
+    };
+
+    recognition.start();
   }
 
   return (
@@ -51,23 +102,56 @@ export default function ChatWidget({
         <label htmlFor="chat-input" className="kiosk-panel__label">
           Your question
         </label>
-        <div className="kiosk-row">
-          <input
-            id="chat-input"
-            type="text"
-            className="kiosk-input"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            placeholder={placeholder}
-            aria-required="true"
-          />
+        <div className="kiosk-row" style={{ display: "flex", gap: "0.6rem", alignItems: "center" }}>
+          <div style={{ position: "relative", flex: "1 1 220px", display: "flex" }}>
+            <input
+              id="chat-input"
+              type="text"
+              className="kiosk-input"
+              style={{ paddingRight: "3rem" }}
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder={placeholder}
+              aria-required="true"
+            />
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              className={`mic-button ${isListening ? "mic-button--listening" : ""}`}
+              title="Speak your question"
+              aria-label="Voice input"
+              style={{
+                position: "absolute",
+                right: "8px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "transparent",
+                border: "none",
+                fontSize: "1.2rem",
+                cursor: "pointer",
+                padding: "4px 8px",
+                borderRadius: "50%",
+                transition: "all 0.2s ease"
+              }}
+            >
+              {isListening ? "🛑" : "🎙️"}
+            </button>
+          </div>
           <label className="kiosk-checkbox">
             <input
               type="checkbox"
               checked={plainLanguage}
               onChange={(e) => setPlainLanguage(e.target.checked)}
             />
-            Plain-language mode
+            Plain-language
+          </label>
+          <label className="kiosk-checkbox">
+            <input
+              type="checkbox"
+              checked={readAloud}
+              onChange={(e) => setReadAloud(e.target.checked)}
+            />
+            Read aloud
           </label>
           <button type="submit" className="kiosk-button" disabled={loading}>
             {loading ? "Thinking…" : "Ask"}
@@ -78,7 +162,7 @@ export default function ChatWidget({
       <div className={`board ${answer ? "" : "board--empty"}`} role="status" aria-live="polite">
         <p className="board__label">StadiumGenie // response</p>
         <p className="board__text">
-          {loading ? "Retrieving…" : answer || "Ask a question to see a response here."}
+          {loading ? "Retrieving…" : answer || "Ask a question or click the microphone to speak."}
         </p>
       </div>
     </div>

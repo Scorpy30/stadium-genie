@@ -15,11 +15,16 @@ VENUE_DISPLAY_NAMES = {
 
 
 @router.get("")
-async def list_venues():
+async def list_venues() -> dict[str, list[dict[str, str]]]:
     """Return every venue currently loaded in the knowledge base, for the
-    frontend's venue selector. Only venues with real subfolders under
-    data/sample_stadium_docs/ show up here -- this list is never
-    hand-maintained separately from the actual data."""
+    frontend's venue selector.
+
+    Only venues with real subfolders under data/sample_stadium_docs/ show up
+    here -- this list is never hand-maintained separately from the actual data.
+
+    Returns:
+        A dict with the 'venues' list, where each item contains venue_id and name.
+    """
     venue_ids = rag_service.list_venues()
     return {
         "venues": [

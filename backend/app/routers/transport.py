@@ -21,7 +21,19 @@ SYSTEM_PROMPT = (
 
 
 @router.post("/recommend")
-async def recommend(req: TransportRequest):
+async def recommend(req: TransportRequest) -> dict[str, str | None]:
+    """Recommend the single best transport option to reach a stadium.
+
+    Retrieves transit docs from RAG based on the destination venue and fan's
+    origin parameters, and uses the LLM to write a grounded transport advice.
+
+    Args:
+        req: TransportRequest containing the venue_id, origin_type, origin_name,
+             kickoff_time, and mode_preference.
+
+    Returns:
+        A dict with the recommendation string and the venue_id.
+    """
     context_docs = rag_service.retrieve(
         f"{req.origin_type} {req.origin_name} transit transport parking shuttle", req.venue_id
     )

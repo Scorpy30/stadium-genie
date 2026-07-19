@@ -21,7 +21,20 @@ SYSTEM_PROMPT = (
 
 
 @router.post("/ask", response_model=NavigationResponse)
-async def ask_navigation(query: NavigationQuery):
+async def ask_navigation(query: NavigationQuery) -> NavigationResponse:
+    """Provide turn-by-turn text wayfinding guidance for a World Cup venue.
+
+    Retrieves venue-specific layout and gate information from RAG based on the
+    fan's question, and uses the LLM to generate clear, step-by-step
+    instructions in the target language.
+
+    Args:
+        query: NavigationQuery containing the question, target language, and
+               venue context.
+
+    Returns:
+        A NavigationResponse containing the final answer and structured steps list.
+    """
     context_docs = rag_service.retrieve(query.question, query.venue_id)
     context = "\n".join(context_docs) if context_docs else "(no venue data available)"
     user_prompt = (
