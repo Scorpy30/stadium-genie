@@ -91,9 +91,22 @@ and scalability decision, not an oversight.
 ## Quick start
 
 ```bash
-cp .env.example .env          # add your chosen LLM API key
+# 1. Copy the example env file into backend/ and fill in your API key
+cp .env.example backend/.env
+# (On Windows: copy .env.example backend\.env)
+
+# 2. Edit backend/.env — set LLM_PROVIDER, LLM_API_KEY, LLM_MODEL, ALLOWED_ORIGINS
+#    .env.example is a TEMPLATE only — never commit the real .env file.
+
+# 3. Start everything
 docker compose up --build     # backend :8000, frontend :3000
 ```
+
+> **Note for Render / cloud deployments:** The `.env.example` at the repo root is
+> a reference template showing the variable names. On Render, add the same
+> variables (`LLM_PROVIDER`, `LLM_API_KEY`, `LLM_MODEL`, `ALLOWED_ORIGINS`,
+> `RATE_LIMIT`) directly in the **Environment** tab of your backend service.
+> Never commit a `.env` containing real secrets to the repo.
 
 ## Repository layout
 
