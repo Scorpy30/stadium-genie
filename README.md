@@ -18,7 +18,7 @@ World Cup venues. It serves three user groups from one platform:
 |---|---|---|
 | Navigation | Turn-by-turn text wayfinding + AI chat ("nearest accessible restroom near Gate C") | `backend/app/routers/navigation.py`, `frontend/components/ChatWidget.jsx` |
 | Crowd management | Density prediction + GenAI-written staff alerts | `backend/app/services/crowd_predictor.py`, `routers/crowd.py` |
-| Accessibility | Screen-reader-first UI, plain-language mode, voice input, sign-language-avatar text track | `routers/accessibility.py`, frontend a11y patterns |
+| Accessibility | Screen-reader-first UI, plain-language mode, ARIA live regions, high-contrast support | `routers/accessibility.py`, frontend a11y patterns |
 | Transportation | Live transit/parking summarized into a single recommendation by the LLM | `routers/transport.py` |
 | Sustainability | Waste-sorting image classification + carbon-footprint chat coach | `routers/sustainability.py` |
 | Multilingual assistance | RAG chatbot answering in 10+ languages from venue knowledge base | `services/rag_service.py`, `routers/multilingual.py` |
@@ -33,7 +33,7 @@ World Cup venues. It serves three user groups from one platform:
 | **Security** | All secrets via env vars, input validation with Pydantic, rate limiting hook in `core/security.py`, CORS allow-list, no PII stored beyond session, dependency pin file |
 | **Efficiency** | Async FastAPI endpoints, streaming LLM responses, response caching hook for repeated navigation/FAQ queries, lightweight in-memory keyword RAG instead of a heavy vector service |
 | **Testing** | `backend/tests` with pytest unit tests for routers/services + CI workflow running them on every push |
-| **Accessibility** | ARIA labels, keyboard-navigable components, high-contrast mode, plain-language toggle, voice input/output hooks |
+| **Accessibility** | ARIA labels, keyboard-navigable components, high-contrast mode, plain-language toggle, `aria-live` response region |
 | **Problem statement alignment** | Every one of the 8 requested capabilities (navigation, crowd mgmt, transportation, sustainability, multilingual, accessibility, ops intelligence, real-time decision support) has a dedicated, working module — see table above |
 
 ## Tech stack (no GCP credits required)
