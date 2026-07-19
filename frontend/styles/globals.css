@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --pitch-dark: #0b3b2e;
+  --pitch: #10523f;
+  --turf: #3ecf8e;
+  --amber: #ffb100;
+  --floodlight: #f6f8f4;
+  --ink: #0d1512;
+  --mist: #7c8c84;
+  --line: #d8e2dc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--floodlight);
+  color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.gate-bar {
+  background: var(--pitch-dark);
+  color: var(--floodlight);
+  padding: 2rem 1.5rem 1.75rem;
+  border-bottom: 4px solid var(--turf);
+}
+
+.gate-bar__eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--turf);
+  margin: 0 0 0.35rem;
+}
+
+.gate-bar h1 {
+  font-family: 'Teko', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+
+.gate-bar p {
+  font-size: 0.95rem;
+  color: #cfe0d8;
+  margin: 0.6rem 0 0;
+  max-width: 42ch;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.kiosk-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(13, 21, 18, 0.04);
+}
+
+.kiosk-panel__label {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mist);
+  margin-bottom: 0.5rem;
+}
+
+.kiosk-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.kiosk-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--floodlight);
+}
+
+.kiosk-input:focus-visible {
+  outline: 2px solid var(--turf);
+  outline-offset: 2px;
+  border-color: var(--turf);
+}
+
+.kiosk-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  color: var(--mist);
+  white-space: nowrap;
+}
+
+.kiosk-button {
+  background: var(--turf);
+  color: var(--pitch-dark);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+
+.kiosk-button:hover:not(:disabled) {
+  background: #34b87c;
+}
+
+.kiosk-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.kiosk-button:focus-visible {
+  outline: 2px solid var(--pitch-dark);
+  outline-offset: 2px;
+}
+
+.kiosk-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.board {
+  margin-top: 1.5rem;
+  background: var(--pitch-dark);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.board::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.board__label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--turf);
+  margin: 0 0 0.5rem;
+}
+
+.board__text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--amber);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.board--empty .board__text {
+  color: #5b7a6c;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .board {
+    animation: board-in 0.25s ease-out;
+  }
+}
+
+@keyframes board-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-title {
+  font-family: 'Teko', sans-serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 2rem 0 0.75rem;
+  color: var(--pitch-dark);
+}
