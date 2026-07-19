@@ -55,3 +55,10 @@ def get_status(zone_id: str) -> dict | None:
         "trend": trend,
         "alert": alert,
     }
+
+def get_all_status() -> list[dict]:
+    """Return current status for every zone that has data, so the fan
+    chatbot can reference live crowd info instead of having no access to
+    it at all. (Demo-scope note: zones aren't tagged per-venue yet, so this
+    returns all known zones regardless of which stadium the fan selected.)"""
+    return [get_status(zone_id) for zone_id in _history.keys() if get_status(zone_id)]
